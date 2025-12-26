@@ -337,7 +337,7 @@ QuicTxBufferTestCase::TestRejection ()
   // Extract first two packets
   Ptr<Packet> outPkt = streamTxBuf.NextSequence(2400, SequenceNumber32(0));
 
-  NS_TEST_ASSERT_MSG_NE(outPkt, 0, "Failed to extract packets");
+  NS_TEST_ASSERT_MSG_EQ(static_cast<bool>(outPkt), true, "Failed to extract packets");
   NS_TEST_ASSERT_MSG_EQ(outPkt->GetSize(), 2400,  "Wrong packet size");
   NS_TEST_ASSERT_MSG_EQ(streamTxBuf.Available (), 14400, "Wrong available data size");
   NS_TEST_ASSERT_MSG_EQ(streamTxBuf.AppSize (), 3600, "Wrong buffer size");
@@ -356,7 +356,7 @@ QuicTxBufferTestCase::TestRejection ()
   // Extract two packets more
   Ptr<Packet> outPktMore = streamTxBuf.NextSequence(2400, SequenceNumber32(0));
 
-  NS_TEST_ASSERT_MSG_NE(outPktMore, 0, "Failed to extract packets");
+  NS_TEST_ASSERT_MSG_EQ(static_cast<bool>(outPktMore), true, "Failed to extract packets");
   NS_TEST_ASSERT_MSG_EQ(outPktMore->GetSize(), 2400,  "Wrong packet size");
   NS_TEST_ASSERT_MSG_EQ(streamTxBuf.Available (), 16800, "Wrong available data size");
   NS_TEST_ASSERT_MSG_EQ(streamTxBuf.AppSize (), 1200, "Wrong buffer size");
@@ -468,7 +468,7 @@ QuicTxBufferTestCase::TestStreamExtract ()
   //Extract all packets
   outPkt = txBuf.NextSequence(3600, SequenceNumber32(1));
 
-  NS_TEST_ASSERT_MSG_NE(outPkt, 0, "Failed to extract packets");
+  NS_TEST_ASSERT_MSG_EQ(static_cast<bool>(outPkt), true, "Failed to extract packets");
   NS_TEST_ASSERT_MSG_EQ(outPkt->GetSize(), 3600,  "Wrong packet size");
   NS_TEST_ASSERT_MSG_EQ(txBuf.Available (), 18000, "Wrong available data size");
   NS_TEST_ASSERT_MSG_EQ(txBuf.AppSize (), 0, "Wrong buffer size");

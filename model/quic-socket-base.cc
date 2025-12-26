@@ -79,12 +79,6 @@ NS_OBJECT_ENSURE_REGISTERED (QuicSocketState);
 const uint16_t QuicSocketBase::MIN_INITIAL_PACKET_SIZE = 1200;
 
 TypeId
-QuicSocketBase::GetInstanceTypeId () const
-{
-  return QuicSocketBase::GetTypeId ();
-}
-
-TypeId
 QuicSocketBase::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::QuicSocketBase")
@@ -840,7 +834,7 @@ QuicSocketBase::Connect (const Address & address)
       m_socketType = CLIENT;
     }
 
-  if (m_quicl5 == 0)
+  if (m_quicl5 == nullptr)
     {
       m_quicl5 = CreateStreamController ();
       m_quicl5->CreateStream (QuicStream::BIDIRECTIONAL, 0);   // Create Stream 0 (necessary)
@@ -1291,7 +1285,7 @@ QuicSocketBase::SendDataPacket (SequenceNumber32 packetNumber,
   if (m_txBuffer->GetNumFrameStream0InBuffer () > 0)
     {
       p = m_txBuffer->NextStream0Sequence (packetNumber);
-      NS_ABORT_MSG_IF (p == 0, "No packet for stream 0 in the buffer!");
+      NS_ABORT_MSG_IF (p == nullptr, "No packet for stream 0 in the buffer!");
     }
   else
     {
@@ -1308,7 +1302,7 @@ QuicSocketBase::SendDataPacket (SequenceNumber32 packetNumber,
   if (sz < maxSize and m_txBuffer->AppSize () == 0 and m_tcb->m_bytesInFlight.Get () < m_tcb->m_cWnd)
     {
       NS_LOG_LOGIC ("Connection is Application-Limited. sz = " << sz << " < maxSize = " << maxSize);
-      m_tcb->m_appLimitedUntil = m_tcb->m_delivered + m_tcb->m_bytesInFlight.Get () ? : 1U;
+      m_tcb->m_appLimitedUntil = m_tcb->m_delivered + m_tcb->m_bytesInFlight.Get () ? m_tcb->m_delivered + m_tcb->m_bytesInFlight.Get () : 1U;
     }
 
   // perform pacing
@@ -1857,7 +1851,7 @@ QuicSocketBase::SetupCallback (void)
 {
   NS_LOG_FUNCTION (this);
 
-  if (m_quicl4 == 0)
+  if (m_quicl4 == nullptr)
     {
       return -1;
     }
@@ -2988,7 +2982,7 @@ void
 QuicSocketBase::SetCongestionControlAlgorithm (Ptr<TcpCongestionOps> algo)
 {
   NS_LOG_FUNCTION (this << algo);
-  if (DynamicCast<QuicCongestionOps> (algo) != 0)
+  if (DynamicCast<QuicCongestionOps> (algo) != nullptr)
     {
       NS_LOG_INFO ("Non-legacy congestion control");
       m_quicCongestionControlLegacy = false;

@@ -58,12 +58,7 @@ public:
    * \return the object TypeId
    */
   static TypeId GetTypeId (void);
-
-  /**
-   * \brief Get the instance TypeId
-   * \return the instance TypeId
-   */
-  virtual TypeId GetInstanceTypeId () const;
+ 
 
   QuicStreamBase (void);
   virtual ~QuicStreamBase (void);

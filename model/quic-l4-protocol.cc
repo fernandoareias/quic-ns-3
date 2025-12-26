@@ -97,13 +97,7 @@ QuicUdpBinding::GetTypeId (void)
   //NS_LOG_UNCOND("QuicUdpBinding");
   return tid;
 }
-
-TypeId
-QuicUdpBinding::GetInstanceTypeId (void) const
-{
-  return GetTypeId ();
-}
-
+ 
 
 
 #undef NS_LOG_APPEND_CONTEXT

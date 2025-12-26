@@ -85,20 +85,20 @@ Traces(uint32_t serverId, std::string pathVersion, std::string finalPart)
   AsciiTraceHelper asciiTraceHelper;
 
   std::ostringstream pathCW;
-  pathCW << "/NodeList/" << serverId << "/$ns3::QuicL4Protocol/SocketList/0/QuicSocketBase/CongestionWindow";
+  pathCW << "/NodeList/" << serverId << "/$ns3::QuicL4Protocol/SocketList/*/QuicSocketBase/CongestionWindow";
   NS_LOG_INFO("Matches cw " << Config::LookupMatches(pathCW.str().c_str()).GetN());
 
   std::ostringstream fileCW;
   fileCW << pathVersion << "QUIC-cwnd-change"  << serverId << "" << finalPart;
 
   std::ostringstream pathRTT;
-  pathRTT << "/NodeList/" << serverId << "/$ns3::QuicL4Protocol/SocketList/0/QuicSocketBase/RTT";
+  pathRTT << "/NodeList/" << serverId << "/$ns3::QuicL4Protocol/SocketList/*/QuicSocketBase/RTT";
 
   std::ostringstream fileRTT;
   fileRTT << pathVersion << "QUIC-rtt"  << serverId << "" << finalPart;
 
   std::ostringstream pathRCWnd;
-  pathRCWnd<< "/NodeList/" << serverId << "/$ns3::QuicL4Protocol/SocketList/0/QuicSocketBase/RWND";
+  pathRCWnd<< "/NodeList/" << serverId << "/$ns3::QuicL4Protocol/SocketList/*/QuicSocketBase/RWND";
 
   std::ostringstream fileRCWnd;
   fileRCWnd<<pathVersion << "QUIC-rwnd-change"  << serverId << "" << finalPart;
@@ -110,13 +110,13 @@ Traces(uint32_t serverId, std::string pathVersion, std::string finalPart)
   NS_LOG_INFO("Matches rx " << Config::LookupMatches(pathRx.str().c_str()).GetN());
 
   Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (fileName.str ().c_str ());
-  Config::ConnectWithoutContext (pathRx.str ().c_str (), MakeBoundCallback (&Rx, stream));
+  Config::ConnectWithoutContextFailSafe (pathRx.str ().c_str (), MakeBoundCallback (&Rx, stream));
 
   Ptr<OutputStreamWrapper> stream1 = asciiTraceHelper.CreateFileStream (fileCW.str ().c_str ());
-  Config::ConnectWithoutContext (pathCW.str ().c_str (), MakeBoundCallback(&CwndChange, stream1));
+  Config::ConnectWithoutContextFailSafe (pathCW.str ().c_str (), MakeBoundCallback(&CwndChange, stream1));
 
   Ptr<OutputStreamWrapper> stream2 = asciiTraceHelper.CreateFileStream (fileRTT.str ().c_str ());
-  Config::ConnectWithoutContext (pathRTT.str ().c_str (), MakeBoundCallback(&RttChange, stream2));
+  Config::ConnectWithoutContextFailSafe (pathRTT.str ().c_str (), MakeBoundCallback(&RttChange, stream2));
 
   Ptr<OutputStreamWrapper> stream4 = asciiTraceHelper.CreateFileStream (fileRCWnd.str ().c_str ());
   Config::ConnectWithoutContextFailSafe (pathRCWnd.str ().c_str (), MakeBoundCallback(&CwndChange, stream4));
@@ -177,8 +177,8 @@ int main (int argc, char *argv[])
   // LogComponentEnable("BulkSendApplication", LOG_LEVEL_INFO);
   // LogComponentEnable("PfifoFastQueueDisc", LOG_LEVEL_ALL);
   // LogComponentEnable ("QuicSocketBase", LOG_LEVEL_ALL);
-  LogComponentEnable("TcpVegas", LOG_LEVEL_ALL);
-  LogComponentEnable("QuicBbr", LOG_LEVEL_ALL);
+  // LogComponentEnable("TcpVegas", LOG_LEVEL_ALL);
+  // LogComponentEnable("QuicBbr", LOG_LEVEL_ALL);
   // LogComponentEnable("QuicL5Protocol", LOG_LEVEL_ALL);
 
   // Set the simulation start and stop time
